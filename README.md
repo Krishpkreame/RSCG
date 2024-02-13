@@ -1,10 +1,10 @@
 # Reddit Short-Form Content Generator (RSCG)
 
-RSCG is a Python-based project for automated short-form video content creation using Reddit data. It leverages web scraping, AI text-to-speech (TTS), and code-based video editing to transform engaging Reddit threads into shareable videos.
+RSCG is a Python-based project for automated short-form video content creation using Reddit data. It leverages Reddit API, AI text-to-speech (TTS), and code-based video editing to transform engaging Reddit threads into shareable videos.
 
 ## Functionality:
 
-### Web Scraping:
+### Reddit PRAW API:
 
 - Fetches data from specified Reddit threads or subreddits.
 - Filters scraped content based on certain criteria.
@@ -28,7 +28,7 @@ RSCG is a Python-based project for automated short-form video content creation u
 
 - Programming Language: Python
 - Dependencies:
-  - Web scraping library
+  - PRAW (Reddit API)
   - AI TTS service API
   - Video editing libraries
 
