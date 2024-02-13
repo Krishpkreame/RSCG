@@ -195,3 +195,14 @@ def tts(text: str, voice: str = "none", filename: str = "output.wav", speed: int
 
     except Exception as e:
         print("Error occurred while generating audio:", str(e))
+
+
+#! Personal Note: Added get_duration function - Krishpkreame
+def get_duration(filename: str) -> float:
+    #! I need this for the rest of the code
+    try:
+        audio = AudioSegment.from_file(filename, format=filename.split(".")[1])
+        duration_seconds = len(audio) / 1000
+        return round(duration_seconds, 2)
+    except FileNotFoundError as e:
+        return 0
