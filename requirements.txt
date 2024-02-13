@@ -1,2 +1,3 @@
 praw
 language_tool_python
+ftfy
