@@ -5,6 +5,8 @@
 # credits: https://github.com/oscie57/tiktok-voice
 
 #! Personal Note: Added pydub for speed control - Krishpkreame
+#! And os for file handling to merge
+import os
 from pydub import AudioSegment
 
 import threading
@@ -182,7 +184,6 @@ def tts(text: str, voice: str = "none", filename: str = "output.wav", speed: int
         print(f"Audio file saved successfully as '{filename}'")
 
         #! Personal Note: Added speed control to the TTS - Krishpkreame
-        # Adjust speed if needed
         if speed != 1.0:
             audio = AudioSegment.from_file(filename, format="mp3")
             final = audio.speedup(playback_speed=speed)
@@ -199,10 +200,64 @@ def tts(text: str, voice: str = "none", filename: str = "output.wav", speed: int
 
 #! Personal Note: Added get_duration function - Krishpkreame
 def get_duration(filename: str) -> float:
-    #! I need this for the rest of the code
+    """
+    Calculate the duration of an audio file in seconds.
+
+    Args:
+        filename (str): The path to the audio file.
+
+    Returns:
+        float: The duration of the audio file in seconds.
+
+    Raises:
+        FileNotFoundError: If the audio file is not found.
+
+    """
     try:
         audio = AudioSegment.from_file(filename, format=filename.split(".")[1])
         duration_seconds = len(audio) / 1000
         return round(duration_seconds, 2)
     except FileNotFoundError as e:
         return 0
+
+#! Personal Note: Added merge_audio_files function - Krishpkreame
+
+
+def merge_audio_files(output_file: str, delay: float = 0.1) -> float:
+    """
+    Merge multiple mp3 audio files into a single audio file with a small delay between each file.
+
+    Args:
+        delay (int): The delay in milliseconds between each audio file. Default is 100 milliseconds.
+
+    Returns:
+        float: The duration of the merged audio in seconds.
+    """
+    # Get all mp3 files in the outputs directory
+    mp3_files = [file for file in os.listdir(
+        "outputs") if file.endswith(".mp3")]
+
+    # Sort the files in number order
+    mp3_files.sort(key=lambda x: int(x.split("_")[2].split(".")[0]))
+
+    # Create an empty AudioSegment object
+    merged_audio = AudioSegment.silent(duration=0)
+
+    # Iterate over the mp3 files and append them to the merged_audio with a small delay
+    for i, file in enumerate(mp3_files):
+        audio = AudioSegment.from_file(
+            os.path.join("outputs", file), format="mp3")
+        if i == 0:
+            merged_audio += audio
+        else:
+            merged_audio += AudioSegment.silent(duration=(delay*1000)) + audio
+
+    # Export the merged audio as a single mp3 file
+    merged_audio.export(output_file, format="wav")
+
+    # Remove all the mp3 files from the outputs directory
+    for file in mp3_files:
+        os.remove(os.path.join("outputs", file))
+
+    # Return the duration of the merged audio in seconds
+    return len(merged_audio) / 1000
