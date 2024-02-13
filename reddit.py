@@ -5,7 +5,7 @@ from ftfy import ftfy
 
 
 class RedditAPI:
-    def __init__(self, subreddit):
+    def __init__(self, subreddit: str):
         """
         Initializes the RedditAPI class.
 
@@ -39,7 +39,7 @@ class RedditAPI:
         # Set the subreddit
         self.subreddit = self.reddit.subreddit(subreddit)
 
-    def __utc_to_datetimestr(self, utc):
+    def __utc_to_datetimestr(self, utc: float):
         """
         Convert a UTC timestamp to a formatted string representing the corresponding datetime.
 
@@ -54,16 +54,15 @@ class RedditAPI:
         # Convert datetime object to formatted string and return
         return self.__datetime_obj.strftime("%d-%m-%Y %H:%M:%S")
 
-    def __filter_content(self, textstr):
+    def __filter_content(self, textstr: str):
         """
-        Filter the content by replacing certain words and removing empty strings.
+        Filters the content by replacing certain words and splitting it into sentences.
 
         Args:
             textstr (str): The input text to be filtered.
 
         Returns:
             list: A list of filtered sentences.
-
         """
         # Grammer fix for better TTS
         self.__unfiltered = ftfy(textstr)
@@ -78,7 +77,7 @@ class RedditAPI:
         # Split content and filter out empty strings, then return
         return [f"{s.strip()}" for s in self.__unfiltered.split(". ") if len(s) > 1]
 
-    def get_from_url(self, url):
+    def get_from_url(self, url: str):
         """
         Retrieves information about a Reddit post from its URL.
 
@@ -103,7 +102,7 @@ class RedditAPI:
             "content": self.__filter_content(self.post.selftext)
         }
 
-    def get_top_posts(self, limit=10):
+    def get_top_posts(self, limit: int = 10):
         """
         Retrieves information about the top posts from the subreddit.
 
@@ -131,7 +130,7 @@ class RedditAPI:
             })
         return self.final
 
-    def get_hot_posts(self, limit=10):
+    def get_hot_posts(self, limit: int = 10):
         """
         Retrieves information about the hot posts from the subreddit.
 
