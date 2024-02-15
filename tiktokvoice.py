@@ -14,7 +14,7 @@ import requests
 import base64
 #! Removed playsound import - Krishpkreame
 # from playsound import playsound
-
+COUNT = 0
 VOICES = [
     # DISNEY VOICES
     'en_us_ghostface',            # Ghost Face
@@ -107,14 +107,16 @@ def generate_audio(text: str, voice: str) -> bytes:
 
 def tts(text: str, voice: str = "none", filename: str = "output.wav", speed: int = 1.0, play_sound: bool = False) -> None:
     # checking if the website is available
-    global current_endpoint
+    global current_endpoint, COUNT
 
     if get_api_response().status_code == 200:
-        print("Service available!")
+        print("tts online", COUNT)
+        COUNT += 1
     else:
         current_endpoint = (current_endpoint + 1) % 2
         if get_api_response().status_code == 200:
-            print("Service available!")
+            print("tts online", COUNT)
+            COUNT += 1
         else:
             print(
                 f"Service not available and probably temporarily rate limited, try again later...")
@@ -181,7 +183,7 @@ def tts(text: str, voice: str = "none", filename: str = "output.wav", speed: int
             audio_base64_data = "".join(audio_base64_data)
 
         save_audio_file(audio_base64_data, filename)
-        print(f"Audio file saved successfully as '{filename}'")
+        print(f"'{filename}' saved.")
 
         #! Personal Note: Added speed control to the TTS - Krishpkreame
         if speed != 1.0:

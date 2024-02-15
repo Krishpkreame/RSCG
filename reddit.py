@@ -129,33 +129,3 @@ class RedditAPI:
                 "content": self.__filter_content(iter_post.selftext)
             })
         return self.final
-
-    def get_hot_posts(self, limit: int = 10):
-        """
-        Retrieves information about the hot posts from the subreddit.
-
-        Parameters:
-        - limit (int): The maximum number of posts to retrieve. Default is 10.
-
-        Returns:
-        - list: A list of dictionaries containing information about the hot posts.
-            Each dictionary contains the following keys:
-            - subreddit (str): The name of the subreddit.
-            - id (str): The ID of the post.
-            - title (str): The title of the post.
-            - time (str): The timestamp of the post in the format "dd-mm-yyyy HH:MM:SS".
-            - content (list): A list of sentences from the post's content.
-        """
-        self.final = []  # Init final list to store data
-        # Get top posts from subreddit
-        for iter_post in self.subreddit.hot(limit=limit):
-            # Split content into sentences
-            self.content = self.post.selftext.replace('\n', ' ').split(". ")
-            self.final.append({
-                "subreddit": iter_post.subreddit.display_name,
-                "id": iter_post.id,
-                "title": iter_post.title,
-                "time": self.__utc_to_datetimestr(iter_post.created_utc),
-                "content": self.__filter_content(iter_post.selftext)
-            })
-        return self.final
